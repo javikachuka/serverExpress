@@ -1,7 +1,6 @@
 const express = require('express') // incluir express al proyecto. Asi se puede hacer con cualquier otro paquete
 const app = express() // instanciar express
 const routes = require('./routes/routes')
-
 //middlewares
 app.use((req, res, next) => {
     console.log('Request url:' + req.url)

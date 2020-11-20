@@ -14,7 +14,9 @@ router.get('/', (req, res) => {
 
 
 router.get('/usuarios', (req, res) => {
-    Usuario.findAll({include: 'cards'})
+    Usuario.findAll({
+        include: ['cars','catacteristicas']
+    })
         .then((users) => {
             res.json(users)
         })
