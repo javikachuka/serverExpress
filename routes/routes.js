@@ -2,7 +2,8 @@ const express = require('express') // incluir express al proyecto. Asi se puede 
 const router = express.Router() //
 const bodyParser = require('body-parser') 
 const conexion = require('../database/conexion')
-const Usuario = require('../models').usuario
+const Usuario = require('../models').User
+const Car = require('../models').Car
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json())
@@ -13,12 +14,12 @@ router.get('/', (req, res) => {
 
 
 router.get('/usuarios', (req, res) => {
-    Usuario.findAll()
-        .then((clientes) => {
-            res.json(clientes)
+    Usuario.findAll({include: 'cards'})
+        .then((users) => {
+            res.json(users)
         })
         .catch((error) => {
-            console.log('Hubo un error al obtener clientes' , error)
+            console.log('Hubo un error al obtener users' , error)
         })
 })
 
@@ -44,7 +45,7 @@ router.put('/usuarios/update', (req, res) => {
     console.log(id)
     var user = Usuario.findByPk(id)
     console.log(user)
-    user.update({
+    Usuario.update({
         nombre: req.body.nombre,
         apellido: req.body.apellido,
         email: req.body.email,
@@ -57,6 +58,32 @@ router.put('/usuarios/update', (req, res) => {
         res.send(500)
     })
 
+})
+
+router.get('/autos', (req, res) => {
+    Car.findAll()
+        .then((autos) => {
+            res.json(autos)
+        })
+        .catch((error) => {
+            console.log('Hubo un error al obtener autos' , error)
+        })
+})
+
+router.post('/autos/create', (req, res) => {
+    console.log('datos' , req.body)
+    Car.create({
+        nombre: req.body.nombre,
+        modelo: req.body.modelo,
+        anio: req.body.anio,
+        userId: req.body.userId
+    }).then((auto) => {
+        console.log(auto)
+        res.send(200)
+    }).catch((error) => {
+        console.log(error)
+        res.send(500)
+    })
 })
 
 
